@@ -1,20 +1,21 @@
 extends Control
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	Global.menuOpen = true
 	$AnimationPlayer.play("open-window")
 	if Global.caesarComplete == false:
 		$ScrollContainer/HBoxContainer/Level2/Button.mouse_filter = MOUSE_FILTER_IGNORE
 		$ScrollContainer/HBoxContainer/Level2/Button.text = "Locked"
 	else:
 		$ScrollContainer/HBoxContainer/Level2/Button.mouse_filter = MOUSE_FILTER_PASS
-		$ScrollContainer/HBoxContainer/Level2/Button.text = "Stream Cipher"
+		$ScrollContainer/HBoxContainer/Level2/Button.text = "Start Level"
 
 	if not Global.streamComplete:
 		$ScrollContainer/HBoxContainer/Level3/Button.mouse_filter = MOUSE_FILTER_IGNORE
 		$ScrollContainer/HBoxContainer/Level3/Button.text = "Locked"
 	else:
 		$ScrollContainer/HBoxContainer/Level3/Button.mouse_filter = MOUSE_FILTER_PASS
-		$ScrollContainer/HBoxContainer/Level3/Button.text = "Block Cipher"
+		$ScrollContainer/HBoxContainer/Level3/Button.text = "Start Level"
 	
 
 func _on_level_load_level(level: PackedScene, anim: String) -> void:
@@ -25,6 +26,8 @@ func _on_level_load_level(level: PackedScene, anim: String) -> void:
 	queue_free();
 
 func _on_close_button_pressed() -> void:
+	Global.menuOpen = false
+	GlobalSounds.close.play()
 	$AnimationPlayer.play("close-window")
 
 
@@ -34,5 +37,4 @@ func _on_close_button_mouse_entered() -> void:
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name == "close-window":
-		GlobalSounds.close.play()
 		queue_free();
